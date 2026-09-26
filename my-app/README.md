@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Your Space
 
-## Getting Started
+Email and password sign-in backed by Supabase Auth. Supabase manages password hashing and authentication; the app never stores passwords itself. The protected account page verifies the session on the server.
 
-First, run the development server:
+## Configure Supabase
+
+1. Create a Supabase project.
+2. In **Authentication → Sign In / Providers**, enable Email. The admin account must already exist in Supabase Auth with a confirmed email.
+3. Copy `.env.example` to `.env.local`. Set the project URL, publishable key, and server-only service-role key from the Supabase project settings. Set `SUPABASE_ADMIN_EMAIL` to the admin account email.
+4. Run `supabase/schema.sql` in the Supabase SQL Editor. It creates a `profiles` table with row-level security and policies that allow each signed-in user to read and update only their own profile.
+5. Restart the development server, then open `http://localhost:3000`. The configured admin can open **Manage users** from the account page and create confirmed email/password accounts. New users can sign in immediately with those credentials.
+
+Never put `SUPABASE_SERVICE_ROLE_KEY` in a `NEXT_PUBLIC_` variable or browser code. It bypasses row-level security and is used only in the server action after the admin session is verified. The publishable key is safe to expose when row-level security is enabled and policies are restrictive. Rotate any service-role/secret key that was previously placed in `.env.example` or committed.
+
+## Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
