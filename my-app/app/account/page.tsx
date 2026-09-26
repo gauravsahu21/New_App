@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AccountTabs } from "@/app/components/account-tabs";
 import { isAdminEmail } from "@/lib/supabase/admin";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "./actions";
 
 export const metadata: Metadata = {
   title: "Your account",
@@ -32,7 +31,8 @@ export default async function AccountPage() {
 
   return (
     <main className="account-page">
-      <section className="account-content" aria-labelledby="account-title">
+      <section className="account-content signed-in-content" aria-labelledby="account-title">
+        <AccountTabs active="account" isAdmin={isAdminEmail(user.email)} />
         <p className="eyebrow account-eyebrow">ACCOUNT ACCESS</p>
         <h1 id="account-title">You&apos;re signed in.</h1>
         <p className="account-intro">
@@ -44,18 +44,6 @@ export default async function AccountPage() {
           <span>Email address</span>
           <strong>{user.email ?? "Email unavailable"}</strong>
         </div>
-        {isAdminEmail(user.email) && (
-          <nav aria-label="Admin" className="account-nav">
-            <Link className="account-nav-link" href="/admin/users">
-              Manage users <span aria-hidden="true">→</span>
-            </Link>
-          </nav>
-        )}
-        <form action={signOut}>
-          <button className="signout-button" type="submit">
-            Sign out <span aria-hidden="true">↗</span>
-          </button>
-        </form>
       </section>
     </main>
   );

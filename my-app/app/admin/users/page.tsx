@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AccountTabs } from "@/app/components/account-tabs";
 import { AddUserForm } from "./add-user-form";
 import { hasAdminApiConfig, isAdminEmail } from "@/lib/supabase/admin";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/app/account/actions";
 
 export const metadata: Metadata = {
   title: "Manage users",
@@ -34,16 +33,7 @@ export default async function ManageUsersPage() {
   return (
     <main className="account-page">
       <section className="account-content admin-content" aria-labelledby="users-title">
-        <nav aria-label="Admin navigation" className="admin-tabs">
-          <Link aria-current="page" className="admin-tab" href="/admin/users">
-            Users
-          </Link>
-          <form action={signOut}>
-            <button className="admin-signout" type="submit">
-              Sign out
-            </button>
-          </form>
-        </nav>
+        <AccountTabs active="users" isAdmin />
         <p className="eyebrow account-eyebrow">ADMIN</p>
         <h1 className="admin-title" id="users-title">Add a user</h1>
         <p className="admin-description">
