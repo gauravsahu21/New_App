@@ -1,14 +1,46 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { getSupabaseConfig } from "@/lib/supabase/config";
 
 export default function Home() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [notice, setNotice] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setNotice("Sign-in is not connected yet. Your details were not sent.");
+    setNotice("");
+
+    if (!getSupabaseConfig()) {
+      setNotice("Add your Supabase project URL and publishable key to .env.local first.");
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email")).trim();
+    const password = String(formData.get("password"));
+
+    setIsSubmitting(true);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        setNotice("We couldn't sign you in with those details. Check them and try again.");
+        return;
+      }
+
+      router.replace("/account");
+    } catch {
+      setNotice("We couldn't reach Supabase. Check your project settings and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -24,7 +56,7 @@ export default function Home() {
         <div className="welcome-copy">
           <p className="eyebrow">A PLACE TO PICK UP</p>
           <h1>Good to have you back.</h1>
-          <p>Everything starts with a familiar number.</p>
+          <p>Your account is right where you left it.</p>
         </div>
 
         <div className="orbit-art" aria-hidden="true">
@@ -42,19 +74,19 @@ export default function Home() {
         <div className="login-form-wrap">
           <p className="eyebrow form-eyebrow">WELCOME BACK</p>
           <h2 id="login-title">Sign in</h2>
-          <p className="form-intro">Enter the mobile number and password for your account.</p>
+          <p className="form-intro">Enter the email address and password for your account.</p>
 
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="field-group">
-              <label htmlFor="phone">Mobile number</label>
+              <label htmlFor="email">Email address</label>
               <input
-                autoComplete="tel"
-                id="phone"
-                inputMode="tel"
-                name="phone"
-                placeholder="e.g. +1 555 123 4567"
+                autoComplete="email"
+                id="email"
+                inputMode="email"
+                name="email"
+                placeholder="you@example.com"
                 required
-                type="tel"
+                type="email"
               />
             </div>
 
@@ -80,8 +112,8 @@ export default function Home() {
               </div>
             </div>
 
-            <button className="submit-button" type="submit">
-              <span>Continue</span>
+            <button className="submit-button" disabled={isSubmitting} type="submit">
+              <span>{isSubmitting ? "Signing in..." : "Continue"}</span>
               <span aria-hidden="true" className="submit-arrow">→</span>
             </button>
             <p aria-live="polite" className="form-notice" role="status">{notice}</p>
@@ -92,3 +124,4 @@ export default function Home() {
     </main>
   );
 }
+//gaurav us
