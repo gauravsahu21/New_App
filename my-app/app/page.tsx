@@ -46,17 +46,16 @@ export default function Home() {
   return (
     <main className="login-page">
       <section className="welcome-panel" aria-label="Welcome">
-        <div className="wordmark" aria-label="Your space">
+        <div className="wordmark" aria-label="A1Thikedar">
           <span className="wordmark-symbol" aria-hidden="true">
             <span />
           </span>
-          <span>Your space</span>
+          <span>A1Thikedar</span>
         </div>
 
         <div className="welcome-copy">
           <p className="eyebrow">A PLACE TO PICK UP</p>
           <h1>Good to have you back.</h1>
-          <p>Your account is right where you left it.</p>
         </div>
 
         <div className="orbit-art" aria-hidden="true">

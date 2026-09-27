@@ -120,7 +120,14 @@ export default async function ManageUsersPage({
                         <td>{listedUser.village ?? "Not provided"}</td>
                         <td>{(listedUser.points ?? 0).toLocaleString()}</td>
                         <td>{new Date(listedUser.created_at).toLocaleDateString()}</td>
-                        <td><UserControls userId={listedUser.user_id} pointsDisabled={Boolean(usersError)} /></td>
+                        <td>
+                          <UserControls
+                            userId={listedUser.user_id}
+                            name={listedUser.display_name ?? ""}
+                            email={listedUser.email ?? ""}
+                            pointsDisabled={Boolean(usersError)}
+                          />
+                        </td>
                       </tr>
                     ))}
                   </tbody>

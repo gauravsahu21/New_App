@@ -23,6 +23,7 @@ export default async function AccountPage() {
     redirect("/");
   }
 
+  const isAdmin = isAdminEmail(user.email);
   const { data: profile } = await supabase
     .from("profiles")
     .select("display_name, points")
@@ -32,7 +33,7 @@ export default async function AccountPage() {
   return (
     <main className="account-page">
       <section className="account-content signed-in-content" aria-labelledby="account-title">
-        <AccountTabs active="account" isAdmin={isAdminEmail(user.email)} />
+        <AccountTabs active="account" isAdmin={isAdmin} />
         <p className="eyebrow account-eyebrow">ACCOUNT ACCESS</p>
         <h1 id="account-title">You&apos;re signed in.</h1>
         <p className="account-intro">
@@ -40,11 +41,13 @@ export default async function AccountPage() {
             ? `Welcome, ${profile.display_name}.`
             : "Your account is ready."}
         </p>
-        <div className="account-points" aria-label={`${(profile?.points ?? 0).toLocaleString()} points`}>
-          <span>POINTS BALANCE</span>
-          <strong>{(profile?.points ?? 0).toLocaleString()}</strong>
-          <small>points</small>
-        </div>
+        {!isAdmin && (
+          <div className="account-points" aria-label={`${(profile?.points ?? 0).toLocaleString()} points`}>
+            <span>POINTS BALANCE</span>
+            <strong>{(profile?.points ?? 0).toLocaleString()}</strong>
+            <small>points</small>
+          </div>
+        )}
         <div className="account-identity">
           <span>Email address</span>
           <strong>{user.email ?? "Email unavailable"}</strong>
