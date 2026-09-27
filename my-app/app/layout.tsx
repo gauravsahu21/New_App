@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Your Space",
+  title: "A1Thikedar",
   description: "Your account, gifts, and points in one place.",
   manifest: "/manifest.webmanifest",
   icons: {

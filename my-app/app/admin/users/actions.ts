@@ -102,6 +102,14 @@ export async function addPoints(
     return { success: false, message: "Admin setup is incomplete. Configure the server-only Supabase key." };
   }
 
+  const { data: targetData, error: targetError } = await adminClient.auth.admin.getUserById(userId);
+  if (targetError || !targetData.user) {
+    return { success: false, message: "Could not find this user." };
+  }
+  if (isAdminEmail(targetData.user.email)) {
+    return { success: false, message: "The admin account does not receive points." };
+  }
+
   const { error } = await adminClient.rpc("add_user_points", {
     p_user_id: userId,
     p_points: points,
@@ -113,6 +121,84 @@ export async function addPoints(
 
   revalidatePath("/admin/users");
   return { success: true, message: `Added ${points.toLocaleString()} points.` };
+}
+
+export async function updateUser(
+  _previousState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  if (!(await getAuthorizedAdmin())) {
+    return { success: false, message: "You are not authorized to update users." };
+  }
+
+  const userId = String(formData.get("userId") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const phoneNumber = String(formData.get("phoneNumber") ?? "").trim();
+  const village = String(formData.get("village") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+
+  if (!/^[0-9a-f-]{36}$/i.test(userId)) {
+    return { success: false, message: "Select a valid user." };
+  }
+  if (!email.includes("@") || name.length < 2 || name.length > 100) {
+    return { success: false, message: "Enter a valid email and a name between 2 and 100 characters." };
+  }
+  if (!/^[+()\d\s.-]{6,32}$/.test(phoneNumber) || phoneNumber.replace(/\D/g, "").length < 6) {
+    return { success: false, message: "Enter a valid phone number." };
+  }
+  if (!village || village.length > 120) {
+    return { success: false, message: "Enter a village name up to 120 characters." };
+  }
+  if (password && password.length < 8) {
+    return { success: false, message: "A new password must be at least 8 characters." };
+  }
+  if (isAdminEmail(email)) {
+    return { success: false, message: "The admin email cannot be assigned to another user." };
+  }
+
+  const adminClient = createAdminClient();
+  if (!adminClient) {
+    return { success: false, message: "Admin setup is incomplete. Configure the server-only Supabase key." };
+  }
+
+  const { data: targetData, error: targetError } = await adminClient.auth.admin.getUserById(userId);
+  if (targetError || !targetData.user || isAdminEmail(targetData.user.email)) {
+    return { success: false, message: "This account cannot be updated." };
+  }
+
+  const { error: authError } = await adminClient.auth.admin.updateUserById(userId, {
+    email,
+    email_confirm: true,
+    user_metadata: {
+      display_name: name,
+      phone_number: phoneNumber,
+      village,
+    },
+    ...(password ? { password } : {}),
+  });
+
+  if (authError) {
+    return { success: false, message: "Could not update the account. Check the email and password requirements." };
+  }
+
+  const { error: profileError } = await adminClient
+    .from("profiles")
+    .upsert({
+      user_id: userId,
+      email,
+      display_name: name,
+      phone_number: phoneNumber,
+      village,
+    }, { onConflict: "user_id" });
+
+  if (profileError) {
+    return { success: false, message: "Account updated, but profile details could not be synchronized." };
+  }
+
+  revalidatePath("/admin/users");
+  revalidatePath("/account");
+  return { success: true, message: "User details updated." };
 }
 
 export async function deleteUser(

@@ -572,6 +572,168 @@ input {
   gap: 7px;
 }
 
+.user-controls-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.user-options {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.user-options summary {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  list-style: none;
+}
+
+.user-options summary::-webkit-details-marker {
+  display: none;
+}
+
+.user-options summary:hover,
+.user-options[open] summary {
+  border-color: #9aa99e;
+  background: #f2f5ef;
+}
+
+.user-options-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.user-options-dots i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--forest);
+}
+
+.user-options-menu {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 5px);
+  right: 0;
+  display: grid;
+  width: 150px;
+  gap: 3px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 8px 22px #173b321c;
+}
+
+.user-options-menu button {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--forest);
+  cursor: pointer;
+  font-size: 11px;
+  text-align: left;
+}
+
+.user-options-menu a {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  padding: 0 9px;
+  border-radius: 3px;
+  color: var(--forest);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.user-options-menu a:hover {
+  background: #f2f5ef;
+}
+
+.user-options-menu button:hover {
+  background: #f2f5ef;
+}
+
+.user-options-menu .user-delete {
+  color: #a44f3e;
+}
+
+.user-edit-form {
+  display: grid;
+  width: min(100%, 460px);
+  gap: 11px;
+  margin-top: 22px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fbfcf8;
+}
+
+.user-edit-form label {
+  display: grid;
+  gap: 5px;
+  color: #526459;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.user-edit-form input {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #fff;
+  color: var(--forest);
+  font: inherit;
+  font-size: 12px;
+}
+
+.user-save {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--forest);
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.user-save:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.edit-user-back {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  margin: -8px 0 18px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.edit-user-back:hover {
+  color: var(--forest);
+}
+
 .points-form {
   display: flex;
   gap: 5px;
@@ -963,5 +1125,199 @@ input {
   .orbit-art {
     right: -24%;
     width: 62%;
+  }
+}
+
+@media (max-width: 680px) {
+  .account-page {
+    display: block;
+    min-height: 100svh;
+    padding: 12px;
+  }
+
+  .admin-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px 14px;
+  }
+
+  .admin-tabs {
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .admin-tab {
+    min-height: 42px;
+  }
+
+  .admin-signout {
+    min-height: 40px;
+    padding: 0 6px;
+  }
+
+  .admin-title {
+    font-size: clamp(29px, 8vw, 36px);
+    line-height: 1.1;
+  }
+
+  .admin-description {
+    margin-bottom: 20px;
+  }
+
+  .admin-form {
+    width: 100%;
+    max-width: none;
+    gap: 14px;
+  }
+
+  .user-directory {
+    margin-top: 28px;
+    padding-top: 20px;
+  }
+
+  .user-search {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px;
+  }
+
+  .user-search input {
+    width: auto;
+    min-width: 0;
+  }
+
+  .user-search button,
+  .user-search a {
+    justify-content: center;
+    padding: 0 9px;
+  }
+
+  .user-table-scroll {
+    overflow: visible;
+  }
+
+  .user-table,
+  .user-table tbody {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .user-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .user-table tbody tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 12px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: #fff;
+  }
+
+  .user-table th,
+  .user-table td {
+    min-width: 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #edf0ea;
+    overflow-wrap: anywhere;
+  }
+
+  .user-table td {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .user-table td::before {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .user-table td:nth-child(1)::before { content: "Name"; }
+  .user-table td:nth-child(2)::before { content: "Email"; }
+  .user-table td:nth-child(3)::before { content: "Phone"; }
+  .user-table td:nth-child(4)::before { content: "Village"; }
+  .user-table td:nth-child(5)::before { content: "Points"; }
+  .user-table td:nth-child(6)::before { content: "Created"; }
+
+  .user-table td:nth-child(1),
+  .user-table td:nth-child(2),
+  .user-table td:nth-child(7) {
+    grid-column: 1 / -1;
+  }
+
+  .user-table td:nth-child(7) {
+    border-bottom: 0;
+  }
+
+  .user-table td:nth-child(7)::before {
+    content: "Actions";
+  }
+
+  .user-email {
+    min-width: 0;
+  }
+
+  .user-controls {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .user-options {
+    position: absolute;
+    z-index: 3;
+    top: 8px;
+    right: 8px;
+  }
+
+  .user-table td:first-child {
+    padding-right: 44px;
+  }
+
+  .points-form input {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    font-size: 13px;
+  }
+
+  .points-form button,
+  .user-delete {
+    min-height: 38px;
+    padding: 0 12px;
+  }
+
+  .user-action-feedback {
+    grid-column: 1 / -1;
+    max-width: none;
+    font-size: 11px;
+  }
+
+  .user-pagination {
+    gap: 8px;
+  }
+
+  .user-pagination a {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
   }
 }
