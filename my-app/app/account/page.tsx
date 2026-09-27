@@ -25,7 +25,7 @@ export default async function AccountPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name")
+    .select("display_name, points")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -40,6 +40,11 @@ export default async function AccountPage() {
             ? `Welcome, ${profile.display_name}.`
             : "Your account is ready."}
         </p>
+        <div className="account-points" aria-label={`${(profile?.points ?? 0).toLocaleString()} points`}>
+          <span>POINTS BALANCE</span>
+          <strong>{(profile?.points ?? 0).toLocaleString()}</strong>
+          <small>points</small>
+        </div>
         <div className="account-identity">
           <span>Email address</span>
           <strong>{user.email ?? "Email unavailable"}</strong>
