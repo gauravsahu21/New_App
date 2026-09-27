@@ -11,6 +11,19 @@ export function AddUserForm({ disabled = false }: { disabled?: boolean }) {
   return (
     <form action={formAction} className="admin-form">
       <div className="field-group">
+        <label htmlFor="new-user-name">Name</label>
+        <input
+          autoComplete="name"
+          disabled={disabled || pending}
+          id="new-user-name"
+          maxLength={100}
+          name="name"
+          placeholder="Full name"
+          required
+          type="text"
+        />
+      </div>
+      <div className="field-group">
         <label htmlFor="new-user-email">Email address</label>
         <input
           autoComplete="off"
@@ -22,6 +35,32 @@ export function AddUserForm({ disabled = false }: { disabled?: boolean }) {
           placeholder="person@example.com"
           required
           type="email"
+        />
+      </div>
+      <div className="field-group">
+        <label htmlFor="new-user-phone">Phone number</label>
+        <input
+          autoComplete="tel"
+          disabled={disabled || pending}
+          id="new-user-phone"
+          maxLength={32}
+          name="phoneNumber"
+          placeholder="+1 555 123 4567"
+          required
+          type="tel"
+        />
+      </div>
+      <div className="field-group">
+        <label htmlFor="new-user-village">Village</label>
+        <input
+          autoComplete="address-level2"
+          disabled={disabled || pending}
+          id="new-user-village"
+          maxLength={120}
+          name="village"
+          placeholder="Village name"
+          required
+          type="text"
         />
       </div>
       <div className="field-group">
